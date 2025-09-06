@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: tree-sitter-parsers
+Version: 0.0.7
+Summary: generate the shared libraries of tree-sitter parsers
+Home-page: https://github.com/yijunyu/tree-sitter-parsers
+Author: Yijun Yu and Nghi D. Q. Bui
+Author-email: yijun.yu@huawei.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Intended Audience :: Developers
+Requires-Dist: tree-sitter (>=0.19.0)
+
+UNKNOWN
+

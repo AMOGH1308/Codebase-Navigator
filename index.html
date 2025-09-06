@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nexus Code Navigator – AI Code Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* (Styles as previously provided with adjustments for spinner and layout sizes) */
+    /* Full styles included here */
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, #1e2a39, #0b0e13);
+      color: #e3eaf0;
+      min-height: 100vh;
+    }
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      animation: slideIn 1s ease-out;
+    }
+    .logo {
+      font-size: 26px;
+      color: #4fc3f7;
+      font-weight: 700;
+    }
+    nav a {
+      margin: 0 15px;
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #fff;
+    }
+    .hero {
+      text-align: center;
+      padding: 80px 20px 40px;
+      animation: fadeIn 1.5s ease-out;
+    }
+    .hero h1 {
+      font-size: 54px;
+      font-weight: 700;
+    }
+    .hero h1 span {
+      color: #4fc3f7;
+    }
+    .hero p {
+      margin-top: 10px;
+      font-size: 20px;
+      color: #aaa;
+    }
+    .demo-button {
+      margin-top: 30px;
+      padding: 12px 32px;
+      border: 1px solid #4fc3f7;
+      border-radius: 30px;
+      background: transparent;
+      color: #4fc3f7;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .demo-button:hover {
+      background: #4fc3f7;
+      color: #000;
+    }
+    /* Layout */
+    #main-container {
+      display: flex;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 50px auto;
+    }
+    /* File Browser */
+    #file-browser {
+      width: 300px;
+      border: 1px solid #4fc3f7;
+      background: #13202e;
+      border-radius: 12px;
+      padding: 10px;
+      overflow-y: auto;
+      height: 600px;
+    }
+    #file-browser h3 {
+      color: #4fc3f7;
+      margin-bottom: 10px;
+    }
+    #file-list {
+      list-style: none;
+      padding-left: 10px;
+      color: #e3eaf0;
+      cursor: pointer;
+      user-select: none;
+    }
+    #file-list li {
+      margin: 5px 0;
+    }
+    #file-list li:hover {
+      background: rgba(79, 195, 247, 0.2);
+      border-radius: 5px;
+    }
+    /* Chat */
+    .chat-container {
+      flex-grow: 1;
+      background: #13202e;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      height: 800px;
+      animation: fadeInUp 1s ease-out;
+    }
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .chat-header h2 {
+      font-size: 18px;
+      color: #8ab6d6;
+    }
+    .chat-header button {
+      background: none;
+      border: none;
+      color: #8ab6d6;
+      font-size: 14px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .chat-header button:hover {
+      color: #fff;
+    }
+    .chat-box {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+      border: 1px solid #4fc3f7;
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: #1f2f3f;
+      min-height: 400px;
+      max-height: 500px;
+    }
+    .chat-box::-webkit-scrollbar {
+      width: 12px;
+    }
+    .chat-box::-webkit-scrollbar-track {
+      background: #13202e;
+      border-radius: 10px;
+    }
+    .chat-box::-webkit-scrollbar-thumb {
+      background-color: #4fc3f7;
+      border-radius: 10px;
+      border: 3px solid #13202e;
+    }
+    .message {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.5;
+      opacity: 0;
+      animation: fadeIn 0.4s ease forwards;
+      word-break: break-word;
+    }
+    .message.user {
+      align-self: flex-end;
+      background: #0f62fe;
+      color: #fff;
+    }
+    .message.bot {
+      align-self: flex-start;
+      background: #1f2f3f;
+      color: #e3eaf0;
+    }
+    .input-section {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    #task-select {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      max-width: 220px;
+      background: #0b3a65;
+      color: #e3eaf0;
+    }
+    #task-select option {
+      background: #13202e;
+      color: #e3eaf0;
+    }
+    #file-selector-container {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    #file-select {
+      max-width: 350px;
+      color: #ccc;
+      background: #13202e;
+      border: 1px solid #4fc3f7;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    #func-select {
+      max-width: 220px;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 14px;
+      background: #0b3a65;
+      color: #e3eaf0;
+      cursor: pointer;
+    }
+    #history-select {
+      max-width: 100%;
+      margin: 8px 0 12px;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 8px;
+      background: #0b3a65;
+      color: #e3eaf0;
+      cursor: pointer;
+      display: none;
+    }
+    textarea {
+      width: 100%;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+      border-radius: 8px;
+      border: none;
+      background: #1e2a39;
+      color: #e3eaf0;
+      padding: 12px;
+      resize: vertical;
+      min-height: 70px;
+      max-height: 130px;
+      margin-bottom: 15px;
+    }
+    #file-upload {
+      margin-bottom: 15px;
+      color: #ccc;
+      cursor: pointer;
+    }
+    #send-button {
+      position: relative;
+      cursor: pointer;
+      background: #4fc3f7;
+      border: none;
+      color: #000;
+      font-size: 18px;
+      padding: 14px 20px;
+      border-radius: 30px;
+      width: 140px;
+      font-weight: 700;
+      transition: background 0.3s;
+      align-self: flex-start;
+      user-select: none;
+    }
+    #send-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    #send-button:hover:enabled {
+      background: #39b2e0;
+    }
+    #send-spinner {
+      display: none;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      z-index: 10;
+    }
+    @keyframes spin {
+      0% {
+        transform: translateY(-50%) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-50%) rotate(360deg);
+      }
+    }
+    @keyframes slideIn {
+      from {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Nexus Code Navigator</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">Docs</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <h1>Chat with <span>AI</span></h1>
+    <p>Just paste your code, load from project files, or upload text files!</p>
+    <button class="demo-button">Try with Demo</button>
+  </section>
+  <div id="main-container">
+    <div id="file-browser">
+      <h3>Project Files</h3>
+      <ul id="file-list"></ul>
+    </div>
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2>Assistant</h2>
+        <button id="clear-chat">Clear chat</button>
+      </div>
+      <div class="chat-box" id="chat-box">
+        <div class="message bot">Hello! How can I help you today?</div>
+      </div>
+      <div class="input-section">
+        <div style="margin-bottom: 15px;">
+          <label for="project-zip-upload" style="color:#4fc3f7; font-weight:600;">Upload Project ZIP:</label><br/>
+          <input type="file" id="project-zip-upload" accept=".zip" style="padding:6px 10px; margin-top:5px; border-radius:8px; border:1px solid #4fc3f7; background:#13202e; color:#ccc;"/>
+          <button id="upload-project-btn" style="padding:8px 16px; margin-left:10px; border-radius:8px; border:none; background:#4fc3f7; color:#000; cursor:pointer;">Upload</button>
+        </div>
+        <select id="task-select" aria-label="Select task">
+          <option value="analyze">Analyze</option>
+          <option value="refactor" selected>Refactor</option>
+          <option value="summarize">Summarize</option>
+          <option value="explain">Explain</option>
+          <option value="dependency-check">Dependency Check</option>
+        </select>
+        <select id="history-select" aria-label="Recent inputs" title="Recent files or snippets"></select>
+        <div id="file-selector-container" style="display: none; margin-top: 10px;">
+          <select id="file-select" aria-label="Select File"></select>
+          <select id="func-select" aria-label="Select Function or Class">
+            <option value="">-- Select Function or Class --</option>
+          </select>
+          <button id="load-snippet-btn" style="padding:6px 16px; margin-left:12px; border-radius:8px; border:none; background:#4fc3f7; color:#000; cursor:pointer;">Load Snippet</button>
+        </div>
+        <textarea id="code-input" placeholder="Paste your Python code here..."></textarea>
+        <textarea id="requirements-input" placeholder="Paste your requirements.txt here..." style="display:none;"></textarea>
+        <input type="file" id="file-upload" accept=".txt,.md,.csv,.log" style="margin-top:10px; color:#ccc;" />
+        <button id="send-button">
+          Send
+          <span id="send-spinner"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BACKEND_URL = "http://127.0.0.1:5000";
+
+    const fileList = document.getElementById("file-list");
+    const chatBox = document.getElementById("chat-box");
+    const clearChatBtn = document.getElementById("clear-chat");
+    const taskSelect = document.getElementById("task-select");
+    const codeInput = document.getElementById("code-input");
+    const requirementsInput = document.getElementById("requirements-input");
+    const fileUploadInput = document.getElementById("file-upload");
+    const projectZipUpload = document.getElementById("project-zip-upload");
+    const uploadProjectBtn = document.getElementById("upload-project-btn");
+    const fileSelectorContainer = document.getElementById("file-selector-container");
+    const fileSelect = document.getElementById("file-select");
+    const funcSelect = document.getElementById("func-select");
+    const loadSnippetBtn = document.getElementById("load-snippet-btn");
+    const historySelect = document.getElementById("history-select");
+    const sendButton = document.getElementById("send-button");
+    const sendSpinner = document.getElementById("send-spinner");
+
+    let recentHistory = [];
+
+    function showSpinner(show) {
+      sendSpinner.style.display = show ? "inline-block" : "none";
+      sendButton.disabled = show;
+    }
+
+    function updateHistory() {
+      if (!recentHistory.length) {
+        historySelect.style.display = "none";
+        return;
+      }
+      historySelect.style.display = "block";
+      historySelect.innerHTML = `<option value="">-- Recent inputs --</option>`;
+      recentHistory.forEach((item, i) => {
+        const text = `${item.type === "file" ? "File" : "Snippet"}: ${item.name || item.filePath}`;
+        historySelect.innerHTML += `<option value="${i}">${text}</option>`;
+      });
+    }
+
+    function addToHistory(type, name, filePath, snippetText) {
+      if (!name && !filePath) return;
+      if (recentHistory.find(h => h.name === name && h.filePath === filePath && h.type === type)) return;
+      recentHistory.unshift({ type, name, filePath, snippetText });
+      if (recentHistory.length > 10) recentHistory.pop();
+      updateHistory();
+    }
+
+    historySelect.addEventListener("change", () => {
+      const idx = historySelect.value;
+      if (!idx) return;
+      const item = recentHistory[idx];
+      if (item.type === "snippet") {
+        codeInput.value = item.snippetText;
+        alert(`Loaded snippet "${item.name}" from ${item.filePath}`);
+      } else if (item.type === "file") {
+        loadFile(item.filePath);
+      }
+      historySelect.value = "";
+    });
+
+    uploadProjectBtn.addEventListener("click", async () => {
+      if (!projectZipUpload.files.length) {
+        alert("Please select a ZIP file.");
+        return;
+      }
+      uploadProjectBtn.disabled = true;
+      uploadProjectBtn.textContent = "Uploading...";
+      const formData = new FormData();
+      formData.append("file", projectZipUpload.files[0]);
+      try {
+        const res = await fetch(`${BACKEND_URL}/upload-project`, { method: "POST", body: formData });
+        const data = await res.json();
+        if (res.ok) {
+          alert(data.message);
+          loadFileList("");
+          clearChat();
+          codeInput.value = "";
+          requirementsInput.value = "";
+        } else {
+          alert("Upload failed: " + data.error);
+        }
+      } catch (e) {
+        alert("Upload error: " + e);
+      } finally {
+        uploadProjectBtn.disabled = false;
+        uploadProjectBtn.textContent = "Upload";
+      }
+    });
+
+    async function loadFileList(path) {
+      try {
+        const res = await fetch(`${BACKEND_URL}/files?path=${encodeURIComponent(path)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to load files");
+        renderFiles(data.items, path, fileList);
+        await populateFileSelect();
+      } catch (e) {
+        alert("Error loading files: " + e.message);
+      }
+    }
+
+    function renderFiles(items, basePath, container) {
+      container.innerHTML = "";
+      items.forEach(i => {
+        const li = document.createElement("li");
+        li.style.marginLeft = "10px";
+        li.style.userSelect = "none";
+        if (i.is_dir) {
+          li.textContent = "📁 " + i.name;
+          li.style.fontWeight = "bold";
+          li.style.cursor = "pointer";
+          const sublist = document.createElement("ul");
+          sublist.style.listStyle = "none";
+          sublist.style.paddingLeft = "15px";
+          sublist.style.maxHeight = "0";
+          sublist.style.overflow = "hidden";
+          sublist.style.transition = "max-height 0.3s ease";
+          li.appendChild(sublist);
+          li.addEventListener("click", e => {
+            e.stopPropagation();
+            if (!sublist.childElementCount) loadFileList(basePath ? `${basePath}/${i.name}` : i.name).then(files => {
+              renderFiles(files.items, basePath ? `${basePath}/${i.name}` : i.name, sublist);
+              if (sublist.classList.contains("expanded")) {
+                sublist.style.maxHeight = sublist.scrollHeight + "px";
+              }
+            });
+            if (sublist.classList.contains("expanded")) {
+              sublist.classList.remove("expanded");
+              sublist.style.maxHeight = "0";
+            } else {
+              sublist.classList.add("expanded");
+              sublist.style.maxHeight = sublist.scrollHeight + "px";
+            }
+          });
+        } else {
+          li.textContent = "📄 " + i.name;
+          li.style.cursor = "pointer";
+          li.addEventListener("click", () => loadFile(basePath ? `${basePath}/${i.name}` : i.name));
+        }
+        container.appendChild(li);
+      });
+    }
+
+    async function loadFile(path) {
+      try {
+        const res = await fetch(`${BACKEND_URL}/file-content?path=${encodeURIComponent(path)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to load file");
+        codeInput.value = data.content;
+        addToHistory("file", null, path);
+        fileSelectorContainer.style.display = "none";
+        alert(`Loaded file ${path}`);
+      } catch (e) {
+        alert("Error loading file: " + e.message);
+      }
+    }
+
+    async function populateFileSelect() {
+      const allFiles = [];
+      async function recurse(path = "") {
+        const res = await fetch(`${BACKEND_URL}/files?path=${encodeURIComponent(path)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        for (const item of data.items) {
+          const currentPath = path ? `${path}/${item.name}` : item.name;
+          if (item.is_dir) {
+            await recurse(currentPath);
+          } else if (item.name.endsWith(".py")) {
+            allFiles.push(currentPath);
+          }
+        }
+      }
+      await recurse();
+      fileSelect.innerHTML = '<option value="">-- Select Python File --</option>';
+      allFiles.forEach(f => {
+        fileSelect.innerHTML += `<option value="${f}">${f}</option>`;
+      });
+      funcSelect.innerHTML = '<option value="">-- Select Function or Class --</option>';
+      fileSelectorContainer.style.display = "none";
+    }
+
+    fileSelect.addEventListener("change", async () => {
+      if (!fileSelect.value) {
+        funcSelect.innerHTML = '<option value="">-- Select Function or Class --</option>';
+        fileSelectorContainer.style.display = "none";
+        return;
+      }
+      fileSelectorContainer.style.display = "flex";
+      try {
+        const res = await fetch(`${BACKEND_URL}/list-elements`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ file_path: fileSelect.value }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to list elements");
+        funcSelect.innerHTML = '<option value="">-- Select Function or Class --</option>';
+        data.functions.forEach(f => {
+          funcSelect.innerHTML += `<option value="function__${f.name}">Function: ${f.name}</option>`;
+        });
+        data.classes.forEach(c => {
+          funcSelect.innerHTML += `<option value="class__${c.name}">Class: ${c.name}</option>`;
+        });
+      } catch (e) {
+        alert("Error loading functions/classes: " + e.message);
+        funcSelect.innerHTML = '<option value="">-- No Functions/Classes --</option>';
+      }
+    });
+
+    loadSnippetBtn.addEventListener("click", async () => {
+      if (!fileSelect.value || !funcSelect.value) {
+        alert("Select file and function/class");
+        return;
+      }
+      const [type, name] = funcSelect.value.split("__");
+      showSpinner(true);
+      try {
+        const res = await fetch(`${BACKEND_URL}/extract-snippet`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ file_path: fileSelect.value, type, name }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to load snippet");
+        codeInput.value = data.snippet;
+        addToHistory("snippet", name, fileSelect.value, data.snippet);
+        alert(`Loaded ${type} ${name}`);
+      } catch (e) {
+        alert("Error loading snippet: " + e.message);
+      }
+      showSpinner(false);
+    });
+
+    taskSelect.addEventListener("change", () => {
+      if (taskSelect.value === "dependency-check") {
+        requirementsInput.style.display = "block";
+        codeInput.style.display = "none";
+        fileSelectorContainer.style.display = "none";
+        fileUpload.style.display = "block";
+      } else {
+        requirementsInput.style.display = "none";
+        codeInput.style.display = "block";
+        fileUpload.style.display = "block";
+        fileSelectorContainer.style.display = "flex";
+      }
+    });
+
+    fileUploadInput.addEventListener("change", e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (taskSelect.value === "dependency-check") {
+          requirementsInput.value = reader.result;
+        } else {
+          codeInput.value = reader.result;
+        }
+      };
+      reader.readAsText(f);
+    });
+
+    async function sendMessage() {
+      const task = taskSelect.value;
+      const code = codeInput.value.trim();
+      const requirements = requirementsInput.value.trim();
+
+      if ((task === "dependency-check" && !requirements) || (task !== "dependency-check" && !code)) {
+        alert("Please provide the required input.");
+        return;
+      }
+
+      const payload = task === "dependency-check" ? { requirements } : { code };
+
+      // Add conversation memory from recent messages
+      const userMessages = [...chatBox.querySelectorAll(".message.user")].slice(-5);
+      const botMessages = [...chatBox.querySelectorAll(".message.bot")].slice(-5);
+      const memory = [];
+      for (let i = 0; i < userMessages.length; i++) {
+        memory.push("User: " + userMessages[i].textContent);
+        if (botMessages[i]) memory.push("Assistant: " + botMessages[i].textContent);
+      }
+      payload.conversation_memory = memory.join("\n");
+
+      // Show user message
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.textContent = task === "dependency-check" ? `Dependency Check:\n${requirements}` : `${task.toUpperCase()}:\n${code}`;
+      chatBox.appendChild(userMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      showSpinner(true);
+      try {
+        const endpointMap = {
+          analyze: "analyze",
+          refactor: "refactor",
+          summarize: "summarize",
+          explain: "explain",
+          "dependency-check": "dependency-check",
+        };
+        const res = await fetch(`${BACKEND_URL}/${endpointMap[task]}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+
+        const botMsg = document.createElement("div");
+        botMsg.className = "message bot";
+
+        if (data.error) {
+          botMsg.textContent = "Error: " + data.error;
+        } else if (task === "dependency-check") {
+          botMsg.textContent = JSON.stringify(data, null, 2);
+        } else if (["refactor", "summarize", "explain"].includes(task)) {
+          botMsg.textContent = data.result || data.summary || data.explanation || JSON.stringify(data, null, 2);
+        } else if (task === "analyze") {
+          botMsg.textContent = JSON.stringify(data, null, 2);
+        } else {
+          botMsg.textContent = JSON.stringify(data, null, 2);
+        }
+
+        chatBox.appendChild(botMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        if (task !== "dependency-check") addToHistory("file", null, null, null);
+
+      } catch (err) {
+        const errMsg = document.createElement("div");
+        errMsg.className = "message bot";
+        errMsg.textContent = "Network error: " + err.message;
+        chatBox.appendChild(errMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } finally {
+        showSpinner(false);
+      }
+    }
+
+    function clearChat() {
+      chatBox.innerHTML = '<div class="message bot">Hello! How can I help you today?</div>';
+      recentHistory = [];
+      updateHistory();
+    }
+
+    clearChatBtn.addEventListener("click", clearChat);
+
+    updateHistory();
+  </script>
+</body>
+</html>

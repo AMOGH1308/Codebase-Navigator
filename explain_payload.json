@@ -1,0 +1,4 @@
+{
+  "code": "def add(a, b):\n    return a + b",
+  "external_texts": ["This is a simple addition function."]
+}

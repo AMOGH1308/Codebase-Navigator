@@ -1,4 +1,4 @@
-# AI-Powered Interactive Code Analysis and Refactoring Platform
+# Codebase Navigator and Refactoring Assistant with Dynamic Web Integration
 
 An intelligent codebase navigator and refactoring assistant that combines static code analysis with AI-powered insights to help developers understand, analyze, and improve their Python codebases.
 

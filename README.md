@@ -1,6 +1,10 @@
 # Codebase Navigator and Refactoring Assistant with Dynamic Web Integration
 
-An intelligent codebase navigator and refactoring assistant that combines static code analysis with AI-powered insights to help developers understand, analyze, and improve their Python codebases.
+Developed an AI-powered code assistant that enables dynamic project upload, interactive file browsing, and precise
+Python code snippet extraction using Tree-sitter. Integrated LangChain with Google Generative AI for context-aware code
+refactoring, summarization, and explanation. Implemented real-time dependency version checking with PyPI integration and
+conversational memory for continuity. Built a responsive frontend offering seamless user interaction and efficient developer
+workflows.
 
 ## Features
 

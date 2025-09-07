@@ -2,7 +2,7 @@
 
 An intelligent codebase navigator and refactoring assistant that combines static code analysis with AI-powered insights to help developers understand, analyze, and improve their Python codebases.
 
-## 🚀 Features
+## Features
 
 - **Dynamic Project Upload**: Upload entire project folders as ZIP files for comprehensive analysis
 - **Interactive File Browser**: Navigate through project structure with an intuitive web interface
@@ -13,7 +13,7 @@ An intelligent codebase navigator and refactoring assistant that combines static
 - **Conversational Memory**: Maintains context across interactions for improved continuity
 - **Responsive Web Interface**: Clean, modern UI with loading indicators and error handling
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Backend:**
 - Python, Flask, Flask-Session, Flask-CORS
@@ -38,7 +38,7 @@ An intelligent codebase navigator and refactoring assistant that combines static
 - Google API key for Gemini
 - Modern web browser
 
-## 🔧 Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -57,22 +57,21 @@ An intelligent codebase navigator and refactoring assistant that combines static
    GOOGLE_API_KEY=your_google_gemini_api_key_here
    ```
 
-4. **Install Tree-sitter Python grammar**
-   ```bash
-   # This may be handled automatically by the application
-   # or follow Tree-sitter Python installation guide
-   ```
 
-## 🚦 Usage
+
+## Usage
 
 1. **Start the Flask server**
-   ```bash
+   ```cmd
    python server.py
    ```
-
-2. **Open your browser**
-   Navigate to `http://localhost:5000`
-
+   - It will by default run on port no 8000
+     
+2. **Run the Index.html on port 8000"
+   ```cmd
+   python -m http.server 8000
+   ```
+   
 3. **Upload your project**
    - Click "Choose File" and select a ZIP archive of your Python project
    - Click "Upload" to process the codebase
@@ -83,7 +82,7 @@ An intelligent codebase navigator and refactoring assistant that combines static
    - Select AI tasks: Analyze, Refactor, Explain, or Summarize
    - View dependency information and version status
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── server.py              # Main Flask application
@@ -91,12 +90,9 @@ An intelligent codebase navigator and refactoring assistant that combines static
 ├── requirements.txt      # Python dependencies
 ├── .env                 # Environment variables (not in repo)
 ├── .gitignore           # Git ignore rules
-├── codebase/            # Uploaded project storage
-├── flask_session/       # Session data storage
-└── nexuscodenavigator/  # Core application modules
 ```
 
-## 🎯 Key Components
+## Key Components
 
 **Backend Architecture:**
 - **Project Handler**: Manages ZIP upload, extraction, and file organization
@@ -111,35 +107,23 @@ An intelligent codebase navigator and refactoring assistant that combines static
 - **AI Interaction Panel**: Multi-task selection with real-time response streaming
 - **Dependency Dashboard**: Visual package status and version information
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 - [ ] Support for additional programming languages
-- [ ] Code execution in sandboxed environment
-- [ ] Integration with version control systems
-- [ ] Real-time collaboration features
-- [ ] Advanced code metrics and visualization
-- [ ] Custom AI model fine-tuning capabilities
+- [ ] Vector Search & Retrieval-Augmented Generation (RAG) to improve context awareness through Document embeddings and similarity            search
+- [ ] Automatically apply AI-generated refactoring changes directly to project files with preview and undo options.
+- [ ] dependency compatibility checker that automatically fetches latest package versions and iteratively resolves conflicts by               downgrading incompatible packages to maintain a stable environment.
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Google Gemini AI for advanced language model capabilities
 - Tree-sitter community for robust parsing tools
 - LangChain for AI orchestration framework
 - Flask community for web framework support
+  
 
-## 📧 Contact
+## Contact
 
 **Amogh** - [GitHub Profile](https://github.com/AMOGH1308)
 
